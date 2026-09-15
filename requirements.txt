@@ -1,0 +1,4 @@
+# Dependências para executar a aplicação demo (app.py)
+streamlit>=1.36.0
+pandas>=2.2.0
+numpy>=1.26.0
