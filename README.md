@@ -52,14 +52,14 @@ projeto-esg-emissoes-carbono/
 - [x] Business Understanding — Project Charter (v2)
 - [x] Data Acquisition and Understanding — Data Summary Report (v2), incluindo
       dados coletados via web scraping (BeautifulSoup)
-- [x] Aplicação demo (Streamlit) — Etapa 2: interface em abas, cache, estado
+- [x] Aplicação demo (Streamlit) — Versão 2: interface em abas, cache, estado
       de sessão, nuvem de palavras e upload/download de CSV
 - [ ] Data Preparation completa (limpeza, EDA, Data Quality Report)
 - [ ] Modeling (previsão de emissões, explicabilidade das fontes)
 - [ ] Evaluation
 - [ ] Deployment final (relatório automático via IA generativa)
 
-## Etapa 2 — o que foi adicionado
+## Versão 2 — o que foi adicionado
 
 - **Web scraping (BeautifulSoup)**: dois scripts em `Code/data_acquisition/`,
   cada um verificando o `robots.txt` do domínio-alvo antes de coletar,

@@ -2,7 +2,7 @@
 
 Aplicação Streamlit do projeto (`app.py`).
 
-## Funcionalidades (Etapa 2)
+## Funcionalidades (Versão 2)
 
 - Interface organizada em 4 abas: Visão Geral, Notícias & Nuvem de Palavras,
   Dados do Projeto, Upload & Download.

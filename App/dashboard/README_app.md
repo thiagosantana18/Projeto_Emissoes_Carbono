@@ -1,4 +1,4 @@
-# Demo (Etapa 2) — Monitoramento e Previsão de Emissões de Carbono Corporativas
+# Demo (Versão 2) — Monitoramento e Previsão de Emissões de Carbono Corporativas
 
 Aplicação Streamlit evoluída, com interface em abas, cache, estado de
 sessão, dados coletados via web scraping (BeautifulSoup), nuvem de palavras
@@ -43,7 +43,7 @@ streamlit run app.py
 
 A aplicação abrirá em `http://localhost:8501`.
 
-## O que mudou nesta etapa
+## O que mudou nesta versão
 
 - **Interface em abas**: Visão Geral · Notícias & Nuvem de Palavras · Dados
   do Projeto · Upload & Download.
