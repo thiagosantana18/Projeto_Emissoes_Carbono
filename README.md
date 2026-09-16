@@ -1,24 +1,10 @@
 # Projeto ESG — Monitoramento e Previsão de Emissões de Carbono Corporativas
 
-Contexto do problema: muitas empresas, especialmente PMEs, não têm visibilidade contínua sobre sua pegada de carbono (Escopo 1, 2 e 3). Os relatórios costumam ser anuais, manuais e reativos, dificultando decisões de redução em tempo hábil.
-
-ODS relacionados: ODS 13 (Ação contra a mudança global do clima) e ODS 12 (Consumo e produção responsáveis).
-
-Solução tecnológica proposta:
-
-  . Coleta de dados: APIs de fatores de emissão (ex.: Climatiq API, EPA, ou bases nacionais como o SEEG/Observatório do Clima no Brasil), integradas a dados internos simulados de consumo energético, frota e insumos.
-
-  . Modelagem: um modelo de séries temporais (ex.: Prophet ou SARIMA) para prever a trajetória de emissões, combinado com um modelo de ML supervisionado para identificar quais atividades mais contribuem para o total (feature importance).
-
-  . IA generativa: uso de um LLM para gerar automaticamente relatórios narrativos (estilo GRI/CDP) a partir dos dados quantitativos, reduzindo o esforço manual de compliance.
-
-  . Dashboard Streamlit: painel com evolução histórica, projeção futura, simulação de cenários ("e se reduzirmos X% no consumo de diesel da frota?") e exportação automática de relatório em PDF/Word.
-
-## Estrutura de pastas
-
 Estrutura de pastas baseada no **TDSP (Team Data Science Process)**, adaptada para um projeto
 de ciência de dados com IA generativa aplicado ao pilar **Ambiental (E)** do ESG,
 alinhado aos ODS 12 e 13 da Agenda 2030.
+
+## Estrutura de pastas
 
 ```
 projeto-esg-emissoes-carbono/
@@ -63,9 +49,25 @@ projeto-esg-emissoes-carbono/
 
 ## Status atual do projeto
 
-- [x] Business Understanding — Project Charter (v1)
-- [x] Data Acquisition and Understanding — Data Summary Report (rascunho 1)
-- [ ] Data Preparation
-- [ ] Modeling
+- [x] Business Understanding — Project Charter (v2)
+- [x] Data Acquisition and Understanding — Data Summary Report (v2), incluindo
+      dados coletados via web scraping (BeautifulSoup)
+- [x] Aplicação demo (Streamlit) — Etapa 2: interface em abas, cache, estado
+      de sessão, nuvem de palavras e upload/download de CSV
+- [ ] Data Preparation completa (limpeza, EDA, Data Quality Report)
+- [ ] Modeling (previsão de emissões, explicabilidade das fontes)
 - [ ] Evaluation
-- [ ] Deployment (Dashboard Streamlit + Relatório automático via IA generativa)
+- [ ] Deployment final (relatório automático via IA generativa)
+
+## Etapa 2 — o que foi adicionado
+
+- **Web scraping (BeautifulSoup)**: dois scripts em `Code/data_acquisition/`,
+  cada um verificando o `robots.txt` do domínio-alvo antes de coletar,
+  salvando o resultado em `Data/raw/*.csv` e `*.txt`.
+- **Nuvem de palavras e estatísticas básicas**: geradas a partir dos dados
+  coletados, exibidas na aplicação.
+- **Cache e estado de sessão em Streamlit**: `st.cache_data` para os
+  carregamentos de dados; `st.session_state` para filtros, histórico de
+  uploads e o dataset combinado entre interações.
+- **Upload e download de CSV**: o usuário pode complementar o dataset da
+  aplicação enviando seus próprios dados, e baixar o resultado consolidado.

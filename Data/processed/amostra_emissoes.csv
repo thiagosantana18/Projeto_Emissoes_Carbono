@@ -1,0 +1,19 @@
+mes_referencia,unidade,setor,tipo_atividade,quantidade,unidade_medida,fator_emissao_kgco2e,emissao_kgco2e,fonte_fator
+2025-01,Matriz - SP,Produção,Gasolina (frota leve),6939.5,litro,2.212,15350.17,EPA
+2025-02,Filial - RJ,Administrativo,Gasolina (frota leve),1206.3,litro,2.212,2668.34,EPA
+2025-03,Filial - MG,Produção,Gasolina (frota leve),6395.5,litro,2.212,14146.85,EPA
+2025-04,CD - PR,Logística,Eletricidade (rede),3877.9,kWh,0.0817,316.82,Climatiq API
+2025-05,Filial - MG,Logística,Eletricidade (rede),5329.0,kWh,0.0817,435.38,Climatiq API
+2025-06,CD - PR,Logística,Gás natural (caldeira),3825.6,m3,1.97,7536.43,DEFRA
+2025-07,Filial - RJ,Administrativo,Eletricidade (rede),978.6,kWh,0.0817,79.95,Climatiq API
+2025-08,Filial - MG,Produção,Gás natural (caldeira),5237.5,m3,1.97,10317.88,DEFRA
+2025-09,Matriz - SP,Produção,Gasolina (frota leve),7780.2,litro,2.212,17209.8,EPA
+2025-10,Filial - RJ,Logística,Gás natural (caldeira),6337.9,m3,1.97,12485.66,DEFRA
+2025-11,CD - PR,Administrativo,Diesel (frota),828.5,litro,2.6712,2213.09,EPA
+2025-12,Filial - RJ,Logística,Eletricidade (rede),5622.9,kWh,0.0817,459.39,Climatiq API
+2026-01,CD - PR,Produção,Diesel (frota),2943.7,litro,2.6712,7863.21,EPA
+2026-02,CD - PR,Produção,Diesel (frota),4021.7,litro,2.6712,10742.77,EPA
+2026-03,CD - PR,Administrativo,Diesel (frota),4067.8,litro,2.6712,10865.91,EPA
+2026-04,Matriz - SP,Administrativo,Eletricidade (rede),5523.6,kWh,0.0817,451.28,Climatiq API
+2026-05,CD - PR,Logística,Eletricidade (rede),5752.0,kWh,0.0817,469.94,Climatiq API
+2026-06,CD - PR,Administrativo,Diesel (frota),6741.9,litro,2.6712,18008.96,EPA

@@ -1,0 +1,15 @@
+# Dados brutos e sensíveis não devem ser versionados
+Data/raw/*
+Data/interim/*
+Data/processed/*
+!Data/raw/README.md
+!Data/interim/README.md
+!Data/processed/README.md
+
+# Ambiente e segredos
+.env
+venv/
+__pycache__/
+*.pyc
+*.py[cod]
+.streamlit/secrets.toml
