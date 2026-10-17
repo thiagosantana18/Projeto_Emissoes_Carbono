@@ -1,0 +1,199 @@
+{
+  "gerado_em": "2026-10-16 23:25:25",
+  "periodo": {
+    "inicio": "2024-10",
+    "fim": "2026-09"
+  },
+  "n_registros": 216,
+  "total_kgco2e": 685997.19,
+  "por_unidade": [
+    {
+      "nome": "Filial - MG",
+      "kgco2e": 364658.95,
+      "percentual": 53.2
+    },
+    {
+      "nome": "CD - PR",
+      "kgco2e": 151154.65,
+      "percentual": 22.0
+    },
+    {
+      "nome": "Filial - RJ",
+      "kgco2e": 112837.74,
+      "percentual": 16.4
+    },
+    {
+      "nome": "Matriz - SP",
+      "kgco2e": 57345.85,
+      "percentual": 8.4
+    }
+  ],
+  "por_tipo_atividade": [
+    {
+      "nome": "Diesel (frota)",
+      "kgco2e": 394940.64,
+      "percentual": 57.6
+    },
+    {
+      "nome": "Gás natural (caldeira)",
+      "kgco2e": 172785.14,
+      "percentual": 25.2
+    },
+    {
+      "nome": "Eletricidade (rede)",
+      "kgco2e": 79550.58,
+      "percentual": 11.6
+    },
+    {
+      "nome": "Gasolina (frota leve)",
+      "kgco2e": 38720.83,
+      "percentual": 5.6
+    }
+  ],
+  "por_mes": [
+    {
+      "mes": "2024-10",
+      "kgco2e": 27041.97
+    },
+    {
+      "mes": "2024-11",
+      "kgco2e": 28290.83
+    },
+    {
+      "mes": "2024-12",
+      "kgco2e": 29241.4
+    },
+    {
+      "mes": "2025-01",
+      "kgco2e": 30213.45
+    },
+    {
+      "mes": "2025-02",
+      "kgco2e": 29727.33
+    },
+    {
+      "mes": "2025-03",
+      "kgco2e": 29503.05
+    },
+    {
+      "mes": "2025-04",
+      "kgco2e": 28153.93
+    },
+    {
+      "mes": "2025-05",
+      "kgco2e": 27139.24
+    },
+    {
+      "mes": "2025-06",
+      "kgco2e": 27230.68
+    },
+    {
+      "mes": "2025-07",
+      "kgco2e": 26151.11
+    },
+    {
+      "mes": "2025-08",
+      "kgco2e": 25760.58
+    },
+    {
+      "mes": "2025-09",
+      "kgco2e": 27003.79
+    },
+    {
+      "mes": "2025-10",
+      "kgco2e": 28188.82
+    },
+    {
+      "mes": "2025-11",
+      "kgco2e": 30725.22
+    },
+    {
+      "mes": "2025-12",
+      "kgco2e": 29606.18
+    },
+    {
+      "mes": "2026-01",
+      "kgco2e": 31705.67
+    },
+    {
+      "mes": "2026-02",
+      "kgco2e": 30325.51
+    },
+    {
+      "mes": "2026-03",
+      "kgco2e": 29484.64
+    },
+    {
+      "mes": "2026-04",
+      "kgco2e": 29241.07
+    },
+    {
+      "mes": "2026-05",
+      "kgco2e": 29030.29
+    },
+    {
+      "mes": "2026-06",
+      "kgco2e": 28481.79
+    },
+    {
+      "mes": "2026-07",
+      "kgco2e": 27044.95
+    },
+    {
+      "mes": "2026-08",
+      "kgco2e": 27615.49
+    },
+    {
+      "mes": "2026-09",
+      "kgco2e": 29090.2
+    }
+  ],
+  "variacao_ultimo_mes_pct": 5.3,
+  "maiores_fontes": [
+    {
+      "nome": "Diesel (frota)",
+      "kgco2e": 394940.64,
+      "percentual": 57.6
+    },
+    {
+      "nome": "Gás natural (caldeira)",
+      "kgco2e": 172785.14,
+      "percentual": 25.2
+    },
+    {
+      "nome": "Eletricidade (rede)",
+      "kgco2e": 79550.58,
+      "percentual": 11.6
+    }
+  ],
+  "fatores_utilizados": [
+    {
+      "tipo_atividade": "Diesel (frota)",
+      "unidade_medida": "litro",
+      "fator_emissao_kgco2e": 2.6712,
+      "fonte_fator": "EPA"
+    },
+    {
+      "tipo_atividade": "Eletricidade (rede)",
+      "unidade_medida": "kWh",
+      "fator_emissao_kgco2e": 0.0817,
+      "fonte_fator": "Climatiq API"
+    },
+    {
+      "tipo_atividade": "Gasolina (frota leve)",
+      "unidade_medida": "litro",
+      "fator_emissao_kgco2e": 2.212,
+      "fonte_fator": "EPA"
+    },
+    {
+      "tipo_atividade": "Gás natural (caldeira)",
+      "unidade_medida": "m3",
+      "fator_emissao_kgco2e": 1.97,
+      "fonte_fator": "DEFRA"
+    }
+  ],
+  "observacoes": [
+    "Dados de atividade sintéticos (amostra de demonstração).",
+    "Fatores de emissão são valores de referência fixos rotulados por fonte; ainda não vêm de consulta ao vivo à Climatiq API."
+  ]
+}

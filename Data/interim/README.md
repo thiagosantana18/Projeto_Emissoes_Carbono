@@ -1,3 +1,3 @@
 # Data/interim
 
-Dados em estágio intermediário de limpeza/transformação (checkpoints do pipeline).
+Artefatos intermediários regeneráveis (não versionados). Hoje vazio.

@@ -1,132 +1,145 @@
 """
 Code/data_acquisition/scrape_noticias_esg.py
 
-Objetivo:
-    Coletar manchetes/títulos de notícias recentes sobre ESG e pegada de
-    carbono a partir de um portal de notícias, para alimentar a tabela de
-    "notícias" e a nuvem de palavras da aplicação.
+Coleta manchetes de notícias sobre ESG/pegada de carbono (BeautifulSoup).
 
-Boas práticas aplicadas:
-    - Verificação do robots.txt via urllib.robotparser ANTES de acessar a
-      página de listagem de notícias.
-    - User-Agent identificado.
-    - Delay entre requisições.
-    - Coleta apenas de metadados públicos já exibidos na página de listagem
-      (título, link, data), sem reproduzir o corpo integral das matérias —
-      preservando os direitos autorais do veículo de imprensa.
+O que foi aprimorado nesta fase (Etapa 3):
+  * parsing separado da rede (extrair_manchetes_de_html) => testável offline;
+  * filtros de relevância de URL (mesmo domínio, profundidade >= 2, sem páginas de autor/tag);
+  * novas colunas: fonte, resumo (linha fina da listagem, truncada), tags temáticas;
+  * deduplicação por URL e por título;
+  * sessão HTTP com retentativas e logging.
 
-Saídas:
-    Data/raw/noticias_esg.csv  -> título, data, autor, url da matéria
-    Data/raw/noticias_esg.txt  -> corpus de títulos (para nuvem de palavras)
+Só metadados exibidos na página de listagem são salvos (título, link, data, linha
+fina truncada) — nunca o corpo das matérias.
 
-Como executar (fora do sandbox, com acesso à internet):
-    python Code/data_acquisition/scrape_noticias_esg.py
+Saídas: Data/raw/noticias_esg.csv e Data/raw/noticias_esg.txt
+Uso:    python Code/data_acquisition/scrape_noticias_esg.py
 """
+from __future__ import annotations
 
 import csv
-import re
+import sys
 import time
-import urllib.robotparser
 from datetime import datetime
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
-import requests
 from bs4 import BeautifulSoup
 
-USER_AGENT = "ProjetoESG-CarbonoBot/1.0 (+uso educacional; contato: equipe-projeto@exemplo.com)"
-HEADERS = {"User-Agent": USER_AGENT}
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))        # Code/
+sys.path.insert(0, str(Path(__file__).resolve().parent))            # esta pasta
+from scraping_utils import configurar_log, criar_sessao, log, normalizar_data, pode_coletar, truncar  # noqa: E402
+from esg_core import paths  # noqa: E402
 
-# Página de listagem de notícias ESG (fonte configurável)
 URL_LISTAGEM = "https://exame.com/esg/"
+COLUNAS = ["titulo", "data_publicacao", "url_materia", "data_coleta", "fonte", "resumo", "tags"]
+CAMINHOS_IGNORADOS = ("/autor/", "/tag/", "/tags/", "/arquivo/", "/busca", "/newsletter", "/assine")
 
-OUTPUT_DIR = Path(__file__).resolve().parents[2] / "Data" / "raw"
-CSV_PATH = OUTPUT_DIR / "noticias_esg.csv"
-TXT_PATH = OUTPUT_DIR / "noticias_esg.txt"
-
-
-def pode_coletar(url: str) -> bool:
-    """Verifica permissão de coleta no robots.txt do domínio."""
-    parsed = urlparse(url)
-    robots_url = f"{parsed.scheme}://{parsed.netloc}/robots.txt"
-
-    rp = urllib.robotparser.RobotFileParser()
-    rp.set_url(robots_url)
-    try:
-        rp.read()
-    except Exception as exc:
-        print(f"[AVISO] Não foi possível ler {robots_url}: {exc}")
-        return False
-
-    permitido = rp.can_fetch(USER_AGENT, url)
-    print(f"[robots.txt] {url} -> {'PERMITIDO' if permitido else 'BLOQUEADO'}")
-    return permitido
+TAGS_TEMATICAS = {
+    "carbono": ("carbono", "descarboniz"),
+    "emissoes": ("emissões", "emissoes"),
+    "esg": ("esg",),
+    "clima": ("clima", "climát", "aquecimento"),
+    "energia": ("energia", "biometano", "renovável", "renovavel", "elétric", "eletric"),
+    "sustentabilidade": ("sustentab",),
+    "neutralidade": ("neutralidade", "net zero"),
+    "regulacao": ("cvm", "obrigat", "regulament", "lei "),
+}
 
 
-def extrair_manchetes(url: str) -> list[dict]:
-    """
-    Faz o parsing da página de listagem e extrai título + link de cada
-    manchete encontrada. A heurística de seleção (tag <a> com texto longo o
-    suficiente para ser um título de matéria) é propositalmente simples e
-    pode precisar de ajuste conforme mudanças no HTML do site-alvo.
-    """
-    resp = requests.get(url, headers=HEADERS, timeout=15)
-    resp.raise_for_status()
+def classificar_tags(texto: str) -> list[str]:
+    t = texto.lower()
+    return [tag for tag, termos in TAGS_TEMATICAS.items() if any(x in t for x in termos)]
 
-    soup = BeautifulSoup(resp.text, "html.parser")
 
-    manchetes = []
-    vistos = set()
+def _contexto(link):
+    return link.find_parent(["article", "li", "div"]) or link.parent
+
+
+def extrair_data_publicacao(link) -> str:
+    ctx = _contexto(link)
+    if ctx is None:
+        return ""
+    tag_time = ctx.find("time")
+    if tag_time is not None:
+        data = normalizar_data(tag_time.get("datetime", "") or tag_time.get_text(" ", strip=True))
+        if data:
+            return data
+    return normalizar_data(ctx.get_text(" ", strip=True))
+
+
+def extrair_resumo(link, titulo: str) -> str:
+    ctx = _contexto(link)
+    if ctx is None:
+        return ""
+    for p in ctx.find_all("p"):
+        txt = " ".join(p.get_text(" ", strip=True).split())
+        if 30 <= len(txt) <= 600 and txt != titulo and titulo not in txt:
+            return truncar(txt, 280)
+    return ""
+
+
+def extrair_manchetes_de_html(html: str, url_base: str) -> list[dict]:
+    soup = BeautifulSoup(html, "html.parser")
+    dominio = urlparse(url_base).netloc.replace("www.", "")
+    manchetes, urls_vistas, titulos_vistos = [], set(), set()
 
     for link in soup.find_all("a", href=True):
-        texto = link.get_text(strip=True)
-        href = link["href"]
-
-        # Heurística: título de matéria costuma ter mais de 25 caracteres
-        # e o link aponta para uma URL absoluta do próprio domínio.
-        if len(texto) > 25 and href.startswith("http") and texto not in vistos:
-            manchetes.append({"titulo": texto, "url_materia": href})
-            vistos.add(texto)
-
+        url = urljoin(url_base, link["href"]).split("#")[0]
+        p = urlparse(url)
+        titulo = " ".join(link.get_text(" ", strip=True).split())
+        if (len(titulo) <= 25 or p.scheme not in ("http", "https")
+                or p.netloc.replace("www.", "") != dominio
+                or len([s for s in p.path.split("/") if s]) < 2
+                or any(x in p.path for x in CAMINHOS_IGNORADOS)
+                or url in urls_vistas or titulo.lower() in titulos_vistos):
+            continue
+        urls_vistas.add(url)
+        titulos_vistos.add(titulo.lower())
+        resumo = extrair_resumo(link, titulo)
+        manchetes.append({
+            "titulo": titulo,
+            "data_publicacao": extrair_data_publicacao(link),
+            "url_materia": url,
+            "fonte": dominio,
+            "resumo": resumo,
+            "tags": ";".join(classificar_tags(f"{titulo} {resumo}")),
+        })
     return manchetes
 
 
-def main():
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    if not pode_coletar(URL_LISTAGEM):
-        print(f"[PARANDO] {URL_LISTAGEM} não permite coleta segundo o robots.txt.")
+def main() -> None:
+    configurar_log()
+    sessao = criar_sessao()
+    if not pode_coletar(URL_LISTAGEM, sessao):
+        log.error("robots.txt não permite coletar %s — abortando.", URL_LISTAGEM)
         return
-
     try:
-        manchetes = extrair_manchetes(URL_LISTAGEM)
-    except requests.RequestException as exc:
-        print(f"[ERRO] Falha ao coletar {URL_LISTAGEM}: {exc}")
+        resp = sessao.get(URL_LISTAGEM, timeout=20)
+        resp.raise_for_status()
+    except Exception as exc:  # noqa: BLE001
+        log.error("Falha ao baixar %s: %s", URL_LISTAGEM, exc)
+        return
+    time.sleep(2)
+
+    manchetes = extrair_manchetes_de_html(resp.text, URL_LISTAGEM)
+    if not manchetes:
+        log.warning("Nenhuma manchete extraída — o HTML do site pode ter mudado (ou exige renderização "
+                    "JavaScript; ver Docs/Project/Decision_Log.md, decisão sobre Selenium).")
         return
 
-    time.sleep(2)  # rate limiting educado
-
-    data_coleta = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(
-            f, fieldnames=["titulo", "url_materia", "data_coleta"]
-        )
-        writer.writeheader()
+    coleta = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    saida = paths.raw_dir()
+    saida.mkdir(parents=True, exist_ok=True)
+    with open(saida / "noticias_esg.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=COLUNAS)
+        w.writeheader()
         for m in manchetes:
-            writer.writerow(
-                {
-                    "titulo": m["titulo"],
-                    "url_materia": m["url_materia"],
-                    "data_coleta": data_coleta,
-                }
-            )
-
-    with open(TXT_PATH, "w", encoding="utf-8") as f:
-        f.write("\n".join(m["titulo"] for m in manchetes))
-
-    print(f"OK: {len(manchetes)} manchetes salvas em {CSV_PATH}")
-    print(f"OK: corpus de títulos salvo em {TXT_PATH}")
+            w.writerow({**m, "data_coleta": coleta})
+    (saida / "noticias_esg.txt").write_text("\n".join(m["titulo"] for m in manchetes), encoding="utf-8")
+    com_data = sum(1 for m in manchetes if m["data_publicacao"])
+    log.info("OK: %d manchetes (%d com data de publicação) em %s", len(manchetes), com_data, saida)
 
 
 if __name__ == "__main__":

@@ -1,19 +1,217 @@
 mes_referencia,unidade,setor,tipo_atividade,quantidade,unidade_medida,fator_emissao_kgco2e,emissao_kgco2e,fonte_fator
-2025-01,Matriz - SP,Produção,Gasolina (frota leve),6939.5,litro,2.212,15350.17,EPA
-2025-02,Filial - RJ,Administrativo,Gasolina (frota leve),1206.3,litro,2.212,2668.34,EPA
-2025-03,Filial - MG,Produção,Gasolina (frota leve),6395.5,litro,2.212,14146.85,EPA
-2025-04,CD - PR,Logística,Eletricidade (rede),3877.9,kWh,0.0817,316.82,Climatiq API
-2025-05,Filial - MG,Logística,Eletricidade (rede),5329.0,kWh,0.0817,435.38,Climatiq API
-2025-06,CD - PR,Logística,Gás natural (caldeira),3825.6,m3,1.97,7536.43,DEFRA
-2025-07,Filial - RJ,Administrativo,Eletricidade (rede),978.6,kWh,0.0817,79.95,Climatiq API
-2025-08,Filial - MG,Produção,Gás natural (caldeira),5237.5,m3,1.97,10317.88,DEFRA
-2025-09,Matriz - SP,Produção,Gasolina (frota leve),7780.2,litro,2.212,17209.8,EPA
-2025-10,Filial - RJ,Logística,Gás natural (caldeira),6337.9,m3,1.97,12485.66,DEFRA
-2025-11,CD - PR,Administrativo,Diesel (frota),828.5,litro,2.6712,2213.09,EPA
-2025-12,Filial - RJ,Logística,Eletricidade (rede),5622.9,kWh,0.0817,459.39,Climatiq API
-2026-01,CD - PR,Produção,Diesel (frota),2943.7,litro,2.6712,7863.21,EPA
-2026-02,CD - PR,Produção,Diesel (frota),4021.7,litro,2.6712,10742.77,EPA
-2026-03,CD - PR,Administrativo,Diesel (frota),4067.8,litro,2.6712,10865.91,EPA
-2026-04,Matriz - SP,Administrativo,Eletricidade (rede),5523.6,kWh,0.0817,451.28,Climatiq API
-2026-05,CD - PR,Logística,Eletricidade (rede),5752.0,kWh,0.0817,469.94,Climatiq API
-2026-06,CD - PR,Administrativo,Diesel (frota),6741.9,litro,2.6712,18008.96,EPA
+2024-10,Matriz - SP,Administrativo,Eletricidade (rede),9166.1,kWh,0.0817,748.87,Climatiq API
+2024-10,Matriz - SP,Administrativo,Gasolina (frota leve),657.7,litro,2.212,1454.83,EPA
+2024-10,Filial - RJ,Logística,Eletricidade (rede),7531.6,kWh,0.0817,615.33,Climatiq API
+2024-10,Filial - RJ,Logística,Diesel (frota),1523.6,litro,2.6712,4069.84,EPA
+2024-10,Filial - MG,Produção,Eletricidade (rede),11208.1,kWh,0.0817,915.7,Climatiq API
+2024-10,Filial - MG,Produção,Gás natural (caldeira),3237.0,m3,1.97,6376.89,DEFRA
+2024-10,Filial - MG,Produção,Diesel (frota),2539.4,litro,2.6712,6783.25,EPA
+2024-10,CD - PR,Logística,Eletricidade (rede),9713.9,kWh,0.0817,793.63,Climatiq API
+2024-10,CD - PR,Logística,Diesel (frota),1978.0,litro,2.6712,5283.63,EPA
+2024-11,Matriz - SP,Administrativo,Eletricidade (rede),9100.3,kWh,0.0817,743.49,Climatiq API
+2024-11,Matriz - SP,Administrativo,Gasolina (frota leve),755.7,litro,2.212,1671.61,EPA
+2024-11,Filial - RJ,Logística,Eletricidade (rede),8028.6,kWh,0.0817,655.94,Climatiq API
+2024-11,Filial - RJ,Logística,Diesel (frota),1487.8,litro,2.6712,3974.21,EPA
+2024-11,Filial - MG,Produção,Eletricidade (rede),14347.7,kWh,0.0817,1172.21,Climatiq API
+2024-11,Filial - MG,Produção,Gás natural (caldeira),3794.7,m3,1.97,7475.56,DEFRA
+2024-11,Filial - MG,Produção,Diesel (frota),2463.0,litro,2.6712,6579.17,EPA
+2024-11,CD - PR,Logística,Eletricidade (rede),10771.7,kWh,0.0817,880.05,Climatiq API
+2024-11,CD - PR,Logística,Diesel (frota),1923.7,litro,2.6712,5138.59,EPA
+2024-12,Matriz - SP,Administrativo,Eletricidade (rede),10556.8,kWh,0.0817,862.49,Climatiq API
+2024-12,Matriz - SP,Administrativo,Gasolina (frota leve),727.9,litro,2.212,1610.11,EPA
+2024-12,Filial - RJ,Logística,Eletricidade (rede),7923.5,kWh,0.0817,647.35,Climatiq API
+2024-12,Filial - RJ,Logística,Diesel (frota),1453.7,litro,2.6712,3883.12,EPA
+2024-12,Filial - MG,Produção,Eletricidade (rede),15087.8,kWh,0.0817,1232.67,Climatiq API
+2024-12,Filial - MG,Produção,Gás natural (caldeira),3798.2,m3,1.97,7482.45,DEFRA
+2024-12,Filial - MG,Produção,Diesel (frota),2582.9,litro,2.6712,6899.44,EPA
+2024-12,CD - PR,Logística,Eletricidade (rede),10786.0,kWh,0.0817,881.22,Climatiq API
+2024-12,CD - PR,Logística,Diesel (frota),2149.8,litro,2.6712,5742.55,EPA
+2025-01,Matriz - SP,Administrativo,Eletricidade (rede),10427.1,kWh,0.0817,851.89,Climatiq API
+2025-01,Matriz - SP,Administrativo,Gasolina (frota leve),755.2,litro,2.212,1670.5,EPA
+2025-01,Filial - RJ,Logística,Eletricidade (rede),8374.5,kWh,0.0817,684.2,Climatiq API
+2025-01,Filial - RJ,Logística,Diesel (frota),1740.0,litro,2.6712,4647.89,EPA
+2025-01,Filial - MG,Produção,Eletricidade (rede),13937.3,kWh,0.0817,1138.68,Climatiq API
+2025-01,Filial - MG,Produção,Gás natural (caldeira),3778.3,m3,1.97,7443.25,DEFRA
+2025-01,Filial - MG,Produção,Diesel (frota),2550.1,litro,2.6712,6811.83,EPA
+2025-01,CD - PR,Logística,Eletricidade (rede),11643.5,kWh,0.0817,951.27,Climatiq API
+2025-01,CD - PR,Logística,Diesel (frota),2251.4,litro,2.6712,6013.94,EPA
+2025-02,Matriz - SP,Administrativo,Eletricidade (rede),10025.5,kWh,0.0817,819.08,Climatiq API
+2025-02,Matriz - SP,Administrativo,Gasolina (frota leve),699.7,litro,2.212,1547.74,EPA
+2025-02,Filial - RJ,Logística,Eletricidade (rede),7685.7,kWh,0.0817,627.92,Climatiq API
+2025-02,Filial - RJ,Logística,Diesel (frota),1587.2,litro,2.6712,4239.73,EPA
+2025-02,Filial - MG,Produção,Eletricidade (rede),14776.5,kWh,0.0817,1207.24,Climatiq API
+2025-02,Filial - MG,Produção,Gás natural (caldeira),3992.0,m3,1.97,7864.24,DEFRA
+2025-02,Filial - MG,Produção,Diesel (frota),2566.6,litro,2.6712,6855.9,EPA
+2025-02,CD - PR,Logística,Eletricidade (rede),11259.5,kWh,0.0817,919.9,Climatiq API
+2025-02,CD - PR,Logística,Diesel (frota),2113.5,litro,2.6712,5645.58,EPA
+2025-03,Matriz - SP,Administrativo,Eletricidade (rede),9859.3,kWh,0.0817,805.5,Climatiq API
+2025-03,Matriz - SP,Administrativo,Gasolina (frota leve),767.4,litro,2.212,1697.49,EPA
+2025-03,Filial - RJ,Logística,Eletricidade (rede),7889.8,kWh,0.0817,644.6,Climatiq API
+2025-03,Filial - RJ,Logística,Diesel (frota),1568.1,litro,2.6712,4188.71,EPA
+2025-03,Filial - MG,Produção,Eletricidade (rede),13678.5,kWh,0.0817,1117.53,Climatiq API
+2025-03,Filial - MG,Produção,Gás natural (caldeira),3814.1,m3,1.97,7513.78,DEFRA
+2025-03,Filial - MG,Produção,Diesel (frota),2736.4,litro,2.6712,7309.47,EPA
+2025-03,CD - PR,Logística,Eletricidade (rede),9807.8,kWh,0.0817,801.3,Climatiq API
+2025-03,CD - PR,Logística,Diesel (frota),2030.8,litro,2.6712,5424.67,EPA
+2025-04,Matriz - SP,Administrativo,Eletricidade (rede),8959.5,kWh,0.0817,731.99,Climatiq API
+2025-04,Matriz - SP,Administrativo,Gasolina (frota leve),689.8,litro,2.212,1525.84,EPA
+2025-04,Filial - RJ,Logística,Eletricidade (rede),7252.1,kWh,0.0817,592.5,Climatiq API
+2025-04,Filial - RJ,Logística,Diesel (frota),1612.9,litro,2.6712,4308.38,EPA
+2025-04,Filial - MG,Produção,Eletricidade (rede),12249.2,kWh,0.0817,1000.76,Climatiq API
+2025-04,Filial - MG,Produção,Gás natural (caldeira),3798.4,m3,1.97,7482.85,DEFRA
+2025-04,Filial - MG,Produção,Diesel (frota),2332.6,litro,2.6712,6230.84,EPA
+2025-04,CD - PR,Logística,Eletricidade (rede),9935.9,kWh,0.0817,811.76,Climatiq API
+2025-04,CD - PR,Logística,Diesel (frota),2047.4,litro,2.6712,5469.01,EPA
+2025-05,Matriz - SP,Administrativo,Eletricidade (rede),9008.2,kWh,0.0817,735.97,Climatiq API
+2025-05,Matriz - SP,Administrativo,Gasolina (frota leve),736.0,litro,2.212,1628.03,EPA
+2025-05,Filial - RJ,Logística,Eletricidade (rede),7296.7,kWh,0.0817,596.14,Climatiq API
+2025-05,Filial - RJ,Logística,Diesel (frota),1413.4,litro,2.6712,3775.47,EPA
+2025-05,Filial - MG,Produção,Eletricidade (rede),11842.5,kWh,0.0817,967.53,Climatiq API
+2025-05,Filial - MG,Produção,Gás natural (caldeira),3598.7,m3,1.97,7089.44,DEFRA
+2025-05,Filial - MG,Produção,Diesel (frota),2497.0,litro,2.6712,6669.99,EPA
+2025-05,CD - PR,Logística,Eletricidade (rede),8861.7,kWh,0.0817,724.0,Climatiq API
+2025-05,CD - PR,Logística,Diesel (frota),1854.1,litro,2.6712,4952.67,EPA
+2025-06,Matriz - SP,Administrativo,Eletricidade (rede),7876.1,kWh,0.0817,643.48,Climatiq API
+2025-06,Matriz - SP,Administrativo,Gasolina (frota leve),718.5,litro,2.212,1589.32,EPA
+2025-06,Filial - RJ,Logística,Eletricidade (rede),6715.4,kWh,0.0817,548.65,Climatiq API
+2025-06,Filial - RJ,Logística,Diesel (frota),1481.9,litro,2.6712,3958.45,EPA
+2025-06,Filial - MG,Produção,Eletricidade (rede),11357.0,kWh,0.0817,927.87,Climatiq API
+2025-06,Filial - MG,Produção,Gás natural (caldeira),3330.7,m3,1.97,6561.48,DEFRA
+2025-06,Filial - MG,Produção,Diesel (frota),2583.2,litro,2.6712,6900.24,EPA
+2025-06,CD - PR,Logística,Eletricidade (rede),8986.7,kWh,0.0817,734.21,Climatiq API
+2025-06,CD - PR,Logística,Diesel (frota),2009.2,litro,2.6712,5366.98,EPA
+2025-07,Matriz - SP,Administrativo,Eletricidade (rede),7885.6,kWh,0.0817,644.25,Climatiq API
+2025-07,Matriz - SP,Administrativo,Gasolina (frota leve),681.2,litro,2.212,1506.81,EPA
+2025-07,Filial - RJ,Logística,Eletricidade (rede),6415.5,kWh,0.0817,524.15,Climatiq API
+2025-07,Filial - RJ,Logística,Diesel (frota),1319.1,litro,2.6712,3523.58,EPA
+2025-07,Filial - MG,Produção,Eletricidade (rede),11827.8,kWh,0.0817,966.33,Climatiq API
+2025-07,Filial - MG,Produção,Gás natural (caldeira),3172.8,m3,1.97,6250.42,DEFRA
+2025-07,Filial - MG,Produção,Diesel (frota),2482.0,litro,2.6712,6629.92,EPA
+2025-07,CD - PR,Logística,Eletricidade (rede),9289.8,kWh,0.0817,758.98,Climatiq API
+2025-07,CD - PR,Logística,Diesel (frota),2001.6,litro,2.6712,5346.67,EPA
+2025-08,Matriz - SP,Administrativo,Eletricidade (rede),8728.9,kWh,0.0817,713.15,Climatiq API
+2025-08,Matriz - SP,Administrativo,Gasolina (frota leve),698.6,litro,2.212,1545.3,EPA
+2025-08,Filial - RJ,Logística,Eletricidade (rede),6541.6,kWh,0.0817,534.45,Climatiq API
+2025-08,Filial - RJ,Logística,Diesel (frota),1425.9,litro,2.6712,3808.86,EPA
+2025-08,Filial - MG,Produção,Eletricidade (rede),10611.6,kWh,0.0817,866.97,Climatiq API
+2025-08,Filial - MG,Produção,Gás natural (caldeira),3048.3,m3,1.97,6005.15,DEFRA
+2025-08,Filial - MG,Produção,Diesel (frota),2316.0,litro,2.6712,6186.5,EPA
+2025-08,CD - PR,Logística,Eletricidade (rede),8690.2,kWh,0.0817,709.99,Climatiq API
+2025-08,CD - PR,Logística,Diesel (frota),2017.9,litro,2.6712,5390.21,EPA
+2025-09,Matriz - SP,Administrativo,Eletricidade (rede),8365.2,kWh,0.0817,683.44,Climatiq API
+2025-09,Matriz - SP,Administrativo,Gasolina (frota leve),700.1,litro,2.212,1548.62,EPA
+2025-09,Filial - RJ,Logística,Eletricidade (rede),7638.6,kWh,0.0817,624.07,Climatiq API
+2025-09,Filial - RJ,Logística,Diesel (frota),1434.8,litro,2.6712,3832.64,EPA
+2025-09,Filial - MG,Produção,Eletricidade (rede),12924.6,kWh,0.0817,1055.94,Climatiq API
+2025-09,Filial - MG,Produção,Gás natural (caldeira),3282.2,m3,1.97,6465.93,DEFRA
+2025-09,Filial - MG,Produção,Diesel (frota),2533.7,litro,2.6712,6768.02,EPA
+2025-09,CD - PR,Logística,Eletricidade (rede),9177.2,kWh,0.0817,749.78,Climatiq API
+2025-09,CD - PR,Logística,Diesel (frota),1974.9,litro,2.6712,5275.35,EPA
+2025-10,Matriz - SP,Administrativo,Eletricidade (rede),9919.7,kWh,0.0817,810.44,Climatiq API
+2025-10,Matriz - SP,Administrativo,Gasolina (frota leve),661.4,litro,2.212,1463.02,EPA
+2025-10,Filial - RJ,Logística,Eletricidade (rede),7744.9,kWh,0.0817,632.76,Climatiq API
+2025-10,Filial - RJ,Logística,Diesel (frota),1530.8,litro,2.6712,4089.07,EPA
+2025-10,Filial - MG,Produção,Eletricidade (rede),12742.4,kWh,0.0817,1041.05,Climatiq API
+2025-10,Filial - MG,Produção,Gás natural (caldeira),3363.2,m3,1.97,6625.5,DEFRA
+2025-10,Filial - MG,Produção,Diesel (frota),2652.4,litro,2.6712,7085.09,EPA
+2025-10,CD - PR,Logística,Eletricidade (rede),10050.8,kWh,0.0817,821.15,Climatiq API
+2025-10,CD - PR,Logística,Diesel (frota),2104.2,litro,2.6712,5620.74,EPA
+2025-11,Matriz - SP,Administrativo,Eletricidade (rede),10049.2,kWh,0.0817,821.02,Climatiq API
+2025-11,Matriz - SP,Administrativo,Gasolina (frota leve),826.9,litro,2.212,1829.1,EPA
+2025-11,Filial - RJ,Logística,Eletricidade (rede),7914.4,kWh,0.0817,646.61,Climatiq API
+2025-11,Filial - RJ,Logística,Diesel (frota),1460.3,litro,2.6712,3900.75,EPA
+2025-11,Filial - MG,Produção,Eletricidade (rede),14202.5,kWh,0.0817,1160.34,Climatiq API
+2025-11,Filial - MG,Produção,Gás natural (caldeira),3917.5,m3,1.97,7717.47,DEFRA
+2025-11,Filial - MG,Produção,Diesel (frota),2948.2,litro,2.6712,7875.23,EPA
+2025-11,CD - PR,Logística,Eletricidade (rede),11606.9,kWh,0.0817,948.28,Climatiq API
+2025-11,CD - PR,Logística,Diesel (frota),2181.2,litro,2.6712,5826.42,EPA
+2025-12,Matriz - SP,Administrativo,Eletricidade (rede),11454.5,kWh,0.0817,935.83,Climatiq API
+2025-12,Matriz - SP,Administrativo,Gasolina (frota leve),712.2,litro,2.212,1575.39,EPA
+2025-12,Filial - RJ,Logística,Eletricidade (rede),8077.3,kWh,0.0817,659.92,Climatiq API
+2025-12,Filial - RJ,Logística,Diesel (frota),1500.7,litro,2.6712,4008.67,EPA
+2025-12,Filial - MG,Produção,Eletricidade (rede),14348.8,kWh,0.0817,1172.3,Climatiq API
+2025-12,Filial - MG,Produção,Gás natural (caldeira),3697.7,m3,1.97,7284.47,DEFRA
+2025-12,Filial - MG,Produção,Diesel (frota),2884.2,litro,2.6712,7704.28,EPA
+2025-12,CD - PR,Logística,Eletricidade (rede),11388.0,kWh,0.0817,930.4,Climatiq API
+2025-12,CD - PR,Logística,Diesel (frota),1997.2,litro,2.6712,5334.92,EPA
+2026-01,Matriz - SP,Administrativo,Eletricidade (rede),10053.2,kWh,0.0817,821.35,Climatiq API
+2026-01,Matriz - SP,Administrativo,Gasolina (frota leve),786.3,litro,2.212,1739.3,EPA
+2026-01,Filial - RJ,Logística,Eletricidade (rede),8988.7,kWh,0.0817,734.38,Climatiq API
+2026-01,Filial - RJ,Logística,Diesel (frota),1806.7,litro,2.6712,4826.06,EPA
+2026-01,Filial - MG,Produção,Eletricidade (rede),17816.5,kWh,0.0817,1455.61,Climatiq API
+2026-01,Filial - MG,Produção,Gás natural (caldeira),4183.7,m3,1.97,8241.89,DEFRA
+2026-01,Filial - MG,Produção,Diesel (frota),2643.1,litro,2.6712,7060.25,EPA
+2026-01,CD - PR,Logística,Eletricidade (rede),10342.0,kWh,0.0817,844.94,Climatiq API
+2026-01,CD - PR,Logística,Diesel (frota),2239.4,litro,2.6712,5981.89,EPA
+2026-02,Matriz - SP,Administrativo,Eletricidade (rede),10067.9,kWh,0.0817,822.55,Climatiq API
+2026-02,Matriz - SP,Administrativo,Gasolina (frota leve),751.6,litro,2.212,1662.54,EPA
+2026-02,Filial - RJ,Logística,Eletricidade (rede),8152.0,kWh,0.0817,666.02,Climatiq API
+2026-02,Filial - RJ,Logística,Diesel (frota),1585.1,litro,2.6712,4234.12,EPA
+2026-02,Filial - MG,Produção,Eletricidade (rede),15777.1,kWh,0.0817,1288.99,Climatiq API
+2026-02,Filial - MG,Produção,Gás natural (caldeira),4084.8,m3,1.97,8047.06,DEFRA
+2026-02,Filial - MG,Produção,Diesel (frota),2770.9,litro,2.6712,7401.63,EPA
+2026-02,CD - PR,Logística,Eletricidade (rede),10927.7,kWh,0.0817,892.79,Climatiq API
+2026-02,CD - PR,Logística,Diesel (frota),1987.8,litro,2.6712,5309.81,EPA
+2026-03,Matriz - SP,Administrativo,Eletricidade (rede),9895.7,kWh,0.0817,808.48,Climatiq API
+2026-03,Matriz - SP,Administrativo,Gasolina (frota leve),760.1,litro,2.212,1681.34,EPA
+2026-03,Filial - RJ,Logística,Eletricidade (rede),9063.1,kWh,0.0817,740.46,Climatiq API
+2026-03,Filial - RJ,Logística,Diesel (frota),1588.7,litro,2.6712,4243.74,EPA
+2026-03,Filial - MG,Produção,Eletricidade (rede),15130.6,kWh,0.0817,1236.17,Climatiq API
+2026-03,Filial - MG,Produção,Gás natural (caldeira),3809.1,m3,1.97,7503.93,DEFRA
+2026-03,Filial - MG,Produção,Diesel (frota),2569.3,litro,2.6712,6863.11,EPA
+2026-03,CD - PR,Logística,Eletricidade (rede),10577.0,kWh,0.0817,864.14,Climatiq API
+2026-03,CD - PR,Logística,Diesel (frota),2075.2,litro,2.6712,5543.27,EPA
+2026-04,Matriz - SP,Administrativo,Eletricidade (rede),10962.3,kWh,0.0817,895.62,Climatiq API
+2026-04,Matriz - SP,Administrativo,Gasolina (frota leve),714.3,litro,2.212,1580.03,EPA
+2026-04,Filial - RJ,Logística,Eletricidade (rede),8116.6,kWh,0.0817,663.13,Climatiq API
+2026-04,Filial - RJ,Logística,Diesel (frota),1462.3,litro,2.6712,3906.1,EPA
+2026-04,Filial - MG,Produção,Eletricidade (rede),14283.7,kWh,0.0817,1166.98,Climatiq API
+2026-04,Filial - MG,Produção,Gás natural (caldeira),3839.7,m3,1.97,7564.21,DEFRA
+2026-04,Filial - MG,Produção,Diesel (frota),2676.2,litro,2.6712,7148.67,EPA
+2026-04,CD - PR,Logística,Eletricidade (rede),10586.9,kWh,0.0817,864.95,Climatiq API
+2026-04,CD - PR,Logística,Diesel (frota),2040.8,litro,2.6712,5451.38,EPA
+2026-05,Matriz - SP,Administrativo,Eletricidade (rede),9349.9,kWh,0.0817,763.89,Climatiq API
+2026-05,Matriz - SP,Administrativo,Gasolina (frota leve),718.3,litro,2.212,1588.88,EPA
+2026-05,Filial - RJ,Logística,Eletricidade (rede),6766.1,kWh,0.0817,552.79,Climatiq API
+2026-05,Filial - RJ,Logística,Diesel (frota),1399.2,litro,2.6712,3737.54,EPA
+2026-05,Filial - MG,Produção,Eletricidade (rede),12876.8,kWh,0.0817,1052.03,Climatiq API
+2026-05,Filial - MG,Produção,Gás natural (caldeira),3933.2,m3,1.97,7748.4,DEFRA
+2026-05,Filial - MG,Produção,Diesel (frota),2669.2,litro,2.6712,7129.97,EPA
+2026-05,CD - PR,Logística,Eletricidade (rede),9942.2,kWh,0.0817,812.28,Climatiq API
+2026-05,CD - PR,Logística,Diesel (frota),2113.1,litro,2.6712,5644.51,EPA
+2026-06,Matriz - SP,Administrativo,Eletricidade (rede),9419.8,kWh,0.0817,769.6,Climatiq API
+2026-06,Matriz - SP,Administrativo,Gasolina (frota leve),739.5,litro,2.212,1635.77,EPA
+2026-06,Filial - RJ,Logística,Eletricidade (rede),6798.2,kWh,0.0817,555.41,Climatiq API
+2026-06,Filial - RJ,Logística,Diesel (frota),1590.0,litro,2.6712,4247.21,EPA
+2026-06,Filial - MG,Produção,Eletricidade (rede),12511.6,kWh,0.0817,1022.2,Climatiq API
+2026-06,Filial - MG,Produção,Gás natural (caldeira),3785.9,m3,1.97,7458.22,DEFRA
+2026-06,Filial - MG,Produção,Diesel (frota),2632.5,litro,2.6712,7031.93,EPA
+2026-06,CD - PR,Logística,Eletricidade (rede),8902.2,kWh,0.0817,727.31,Climatiq API
+2026-06,CD - PR,Logística,Diesel (frota),1884.6,litro,2.6712,5034.14,EPA
+2026-07,Matriz - SP,Administrativo,Eletricidade (rede),9479.2,kWh,0.0817,774.45,Climatiq API
+2026-07,Matriz - SP,Administrativo,Gasolina (frota leve),807.8,litro,2.212,1786.85,EPA
+2026-07,Filial - RJ,Logística,Eletricidade (rede),6794.6,kWh,0.0817,555.12,Climatiq API
+2026-07,Filial - RJ,Logística,Diesel (frota),1449.2,litro,2.6712,3871.1,EPA
+2026-07,Filial - MG,Produção,Eletricidade (rede),13120.9,kWh,0.0817,1071.98,Climatiq API
+2026-07,Filial - MG,Produção,Gás natural (caldeira),3195.2,m3,1.97,6294.54,DEFRA
+2026-07,Filial - MG,Produção,Diesel (frota),2459.5,litro,2.6712,6569.82,EPA
+2026-07,CD - PR,Logística,Eletricidade (rede),9815.5,kWh,0.0817,801.93,Climatiq API
+2026-07,CD - PR,Logística,Diesel (frota),1991.3,litro,2.6712,5319.16,EPA
+2026-08,Matriz - SP,Administrativo,Eletricidade (rede),8771.7,kWh,0.0817,716.65,Climatiq API
+2026-08,Matriz - SP,Administrativo,Gasolina (frota leve),728.0,litro,2.212,1610.34,EPA
+2026-08,Filial - RJ,Logística,Eletricidade (rede),7163.1,kWh,0.0817,585.23,Climatiq API
+2026-08,Filial - RJ,Logística,Diesel (frota),1631.0,litro,2.6712,4356.73,EPA
+2026-08,Filial - MG,Produção,Eletricidade (rede),12351.1,kWh,0.0817,1009.08,Climatiq API
+2026-08,Filial - MG,Produção,Gás natural (caldeira),3615.2,m3,1.97,7121.94,DEFRA
+2026-08,Filial - MG,Produção,Diesel (frota),2319.4,litro,2.6712,6195.58,EPA
+2026-08,CD - PR,Logística,Eletricidade (rede),9623.7,kWh,0.0817,786.26,Climatiq API
+2026-08,CD - PR,Logística,Diesel (frota),1959.3,litro,2.6712,5233.68,EPA
+2026-09,Matriz - SP,Administrativo,Eletricidade (rede),8586.8,kWh,0.0817,701.54,Climatiq API
+2026-09,Matriz - SP,Administrativo,Gasolina (frota leve),710.7,litro,2.212,1572.07,EPA
+2026-09,Filial - RJ,Logística,Eletricidade (rede),7244.0,kWh,0.0817,591.83,Climatiq API
+2026-09,Filial - RJ,Logística,Diesel (frota),1619.8,litro,2.6712,4326.81,EPA
+2026-09,Filial - MG,Produção,Eletricidade (rede),11944.2,kWh,0.0817,975.84,Climatiq API
+2026-09,Filial - MG,Produção,Gás natural (caldeira),3637.6,m3,1.97,7166.07,DEFRA
+2026-09,Filial - MG,Produção,Diesel (frota),2606.2,litro,2.6712,6961.68,EPA
+2026-09,CD - PR,Logística,Eletricidade (rede),9964.3,kWh,0.0817,814.08,Climatiq API
+2026-09,CD - PR,Logística,Diesel (frota),2238.8,litro,2.6712,5980.28,EPA

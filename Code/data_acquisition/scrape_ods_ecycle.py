@@ -1,156 +1,87 @@
 """
 Code/data_acquisition/scrape_ods_ecycle.py
 
-Objetivo:
-    Coletar o conteúdo introdutório dos ODS 12 e 13 (Agenda 2030) publicado
-    pelo portal eCycle, para alimentar a seção de contexto/estatísticas da
-    aplicação (nuvem de palavras e estatísticas básicas).
+Coleta trechos das páginas dos ODS 12 e 13 (eCycle) com BeautifulSoup.
 
-Por que este script roda separado da aplicação Streamlit:
-    Scraping é uma operação de rede, mais lenta e sujeita a bloqueios/latência.
-    Rodá-lo separadamente (fora do ciclo de vida do Streamlit) evita repetir a
-    coleta a cada interação do usuário — o resultado é salvo em CSV/TXT e a
-    aplicação apenas lê esses arquivos (com cache).
+Aprimoramentos da Etapa 3: parsing separado da rede (testável offline); coluna `secao`
+(último <h2>/<h3> antes do parágrafo — contexto útil para RAG/Q&A); trechos truncados
+em 600 caracteres (cautela com direitos autorais); sessão com retentativas.
 
-Boas práticas aplicadas:
-    - Verificação do robots.txt via urllib.robotparser ANTES de qualquer
-      requisição às páginas de conteúdo.
-    - User-Agent identificado (não se passa por navegador).
-    - Delay entre requisições (rate limiting educado).
-    - Falha de forma clara e não silenciosa se o robots.txt proibir o acesso.
-
-Saídas:
-    Data/raw/ods_conteudo.csv  -> dados estruturados (ods, título, meta, texto)
-    Data/raw/ods_conteudo.txt  -> corpus de texto (para nuvem de palavras)
-
-Como executar (fora do sandbox, com acesso à internet):
-    python Code/data_acquisition/scrape_ods_ecycle.py
+Saídas: Data/raw/ods_conteudo.csv e Data/raw/ods_conteudo.txt
+Uso:    python Code/data_acquisition/scrape_ods_ecycle.py
 """
+from __future__ import annotations
 
 import csv
+import sys
 import time
-import urllib.robotparser
 from datetime import datetime
 from pathlib import Path
-from urllib.parse import urlparse
 
-import requests
 from bs4 import BeautifulSoup
 
-USER_AGENT = "ProjetoESG-CarbonoBot/1.0 (+uso educacional; contato: equipe-projeto@exemplo.com)"
-HEADERS = {"User-Agent": USER_AGENT}
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from scraping_utils import configurar_log, criar_sessao, log, pode_coletar, truncar  # noqa: E402
+from esg_core import paths  # noqa: E402
 
-# Páginas-alvo: descrição oficial (traduzida) dos ODS 12 e 13 da Agenda 2030
 FONTES = [
     {"ods": "ODS 12", "url": "https://www.ecycle.com.br/ods-12/"},
     {"ods": "ODS 13", "url": "https://www.ecycle.com.br/ods-13/"},
 ]
-
-# Diretório de saída (raiz do projeto / Data / raw)
-OUTPUT_DIR = Path(__file__).resolve().parents[2] / "Data" / "raw"
-CSV_PATH = OUTPUT_DIR / "ods_conteudo.csv"
-TXT_PATH = OUTPUT_DIR / "ods_conteudo.txt"
+COLUNAS = ["ods", "titulo_pagina", "secao", "trecho", "url_fonte", "data_coleta"]
+MAX_CHARS_TRECHO = 600
+MIN_CHARS_PARAGRAFO = 40
 
 
-def pode_coletar(url: str) -> bool:
-    """
-    Verifica no robots.txt do domínio se o nosso User-Agent tem permissão
-    para acessar a URL informada. Retorna True/False.
-    """
-    parsed = urlparse(url)
-    robots_url = f"{parsed.scheme}://{parsed.netloc}/robots.txt"
-
-    rp = urllib.robotparser.RobotFileParser()
-    rp.set_url(robots_url)
-    try:
-        rp.read()
-    except Exception as exc:
-        print(f"[AVISO] Não foi possível ler {robots_url}: {exc}")
-        # Postura conservadora: se não conseguimos ler o robots.txt,
-        # não assumimos permissão.
-        return False
-
-    permitido = rp.can_fetch(USER_AGENT, url)
-    print(f"[robots.txt] {url} -> {'PERMITIDO' if permitido else 'BLOQUEADO'}")
-    return permitido
+def extrair_trechos_de_html(html: str) -> dict:
+    soup = BeautifulSoup(html, "html.parser")
+    h1 = soup.find("h1")
+    titulo = h1.get_text(" ", strip=True) if h1 else ""
+    corpo = soup.find("article") or soup
+    secao, itens = "", []
+    for el in corpo.find_all(["h2", "h3", "p"]):
+        texto = " ".join(el.get_text(" ", strip=True).split())
+        if el.name in ("h2", "h3"):
+            secao = texto
+        elif len(texto) >= MIN_CHARS_PARAGRAFO:
+            itens.append({"secao": secao, "trecho": truncar(texto, MAX_CHARS_TRECHO)})
+    return {"titulo": titulo, "itens": itens}
 
 
-def extrair_conteudo(url: str) -> dict:
-    """Baixa a página e extrai título + parágrafos principais do artigo."""
-    resp = requests.get(url, headers=HEADERS, timeout=15)
-    resp.raise_for_status()
-
-    soup = BeautifulSoup(resp.text, "html.parser")
-
-    titulo = soup.find("h1")
-    titulo = titulo.get_text(strip=True) if titulo else ""
-
-    # Parágrafos dentro do corpo do artigo (heurística: tag <article> ou <p> gerais)
-    artigo = soup.find("article") or soup
-    paragrafos = [
-        p.get_text(" ", strip=True)
-        for p in artigo.find_all("p")
-        if len(p.get_text(strip=True)) > 40  # ignora parágrafos muito curtos (menus, avisos)
-    ]
-
-    return {"titulo": titulo, "paragrafos": paragrafos}
-
-
-def main():
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    linhas_csv = []
-    textos_corpus = []
-
+def main() -> None:
+    configurar_log()
+    sessao = criar_sessao()
+    linhas = []
     for fonte in FONTES:
         url = fonte["url"]
-        ods = fonte["ods"]
-
-        if not pode_coletar(url):
-            print(f"[PULANDO] {url} não permite coleta segundo o robots.txt.")
+        if not pode_coletar(url, sessao):
+            log.warning("Pulando %s (robots.txt)", url)
             continue
-
         try:
-            conteudo = extrair_conteudo(url)
-        except requests.RequestException as exc:
-            print(f"[ERRO] Falha ao coletar {url}: {exc}")
+            resp = sessao.get(url, timeout=20)
+            resp.raise_for_status()
+        except Exception as exc:  # noqa: BLE001
+            log.error("Falha ao coletar %s: %s", url, exc)
             continue
-
-        data_coleta = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        for paragrafo in conteudo["paragrafos"]:
-            linhas_csv.append(
-                {
-                    "ods": ods,
-                    "titulo_pagina": conteudo["titulo"],
-                    "trecho": paragrafo,
-                    "url_fonte": url,
-                    "data_coleta": data_coleta,
-                }
-            )
-            textos_corpus.append(paragrafo)
-
-        # Rate limiting educado entre requisições
+        dados = extrair_trechos_de_html(resp.text)
+        coleta = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        for it in dados["itens"]:
+            linhas.append({"ods": fonte["ods"], "titulo_pagina": dados["titulo"], "secao": it["secao"],
+                           "trecho": it["trecho"], "url_fonte": url, "data_coleta": coleta})
         time.sleep(2)
 
-    if not linhas_csv:
-        print("Nenhum conteúdo coletado (robots.txt bloqueou ou houve erro de rede).")
+    if not linhas:
+        log.warning("Nada coletado (robots.txt bloqueou, erro de rede ou HTML mudou).")
         return
-
-    # --- Salva CSV estruturado ---
-    with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(
-            f, fieldnames=["ods", "titulo_pagina", "trecho", "url_fonte", "data_coleta"]
-        )
-        writer.writeheader()
-        writer.writerows(linhas_csv)
-
-    # --- Salva corpus em TXT (para nuvem de palavras) ---
-    with open(TXT_PATH, "w", encoding="utf-8") as f:
-        f.write("\n".join(textos_corpus))
-
-    print(f"OK: {len(linhas_csv)} trechos salvos em {CSV_PATH}")
-    print(f"OK: corpus de texto salvo em {TXT_PATH}")
+    saida = paths.raw_dir()
+    saida.mkdir(parents=True, exist_ok=True)
+    with open(saida / "ods_conteudo.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=COLUNAS)
+        w.writeheader()
+        w.writerows(linhas)
+    (saida / "ods_conteudo.txt").write_text("\n".join(l["trecho"] for l in linhas), encoding="utf-8")
+    log.info("OK: %d trechos em %s", len(linhas), saida)
 
 
 if __name__ == "__main__":

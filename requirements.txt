@@ -1,16 +1,23 @@
-# Dependências para executar a aplicação demo (app.py) e os scripts de coleta
+# Dashboard
+streamlit>=1.40.0
+plotly>=5.20.0
 
-# --- Interface ---
-streamlit>=1.36.0
+# API
+fastapi>=0.110.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.6.0
 
-# --- Dados ---
+# Dados
 pandas>=2.2.0
 numpy>=1.26.0
 
-# --- Coleta de dados (web scraping) ---
+# Coleta (web scraping estático)
 requests>=2.31.0
 beautifulsoup4>=4.12.0
 
-# --- Nuvem de palavras ---
+# Nuvem de palavras (opcional: o app funciona sem ela, exibindo só o ranking)
 wordcloud>=1.9.3
 matplotlib>=3.8.0
+
+# Selenium NÃO é usado: nenhuma fonte atual exige renderização JavaScript
+# (ver Docs/Project/Decision_Log.md, ADR-003).

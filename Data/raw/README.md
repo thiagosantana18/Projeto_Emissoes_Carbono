@@ -1,11 +1,12 @@
 # Data/raw
 
-Dados brutos, coletados via scraping (ver `Code/data_acquisition/`).
+Dados brutos, como coletados/recebidos. Não editar à mão.
 
-- `ods_conteudo.csv` / `.txt` — trechos sobre os ODS 12 e 13 (eCycle).
-- `noticias_esg.csv` / `.txt` — manchetes de notícias sobre ESG (Exame).
-- `NOTA_COLETA.md` — explica como e de onde os dados foram coletados, e
-  como reproduzir a coleta com os scripts em `Code/data_acquisition/`.
+| Arquivo | Origem | Gerado por | Versionado |
+|---|---|---|---|
+| `noticias_esg.csv` / `.txt` | manchetes de portal de notícias ESG | `Code/data_acquisition/scrape_noticias_esg.py` | sim |
+| `ods_conteudo.csv` / `.txt` | trechos das páginas dos ODS 12/13 | `Code/data_acquisition/scrape_ods_ecycle.py` | sim |
+| `emissoes_enviadas_api.csv` | registros recebidos via `POST /emissoes` | API (`App/api`) | **não** (dado de usuário) |
 
-Não editar manualmente — estes arquivos são regenerados pelos scripts de
-coleta. (Pasta normalmente ignorada no versionamento — ver `.gitignore`.)
+⚠️ Os arquivos de notícias/ODS que acompanham o projeto são uma **amostra** (as URLs de notícia apontam para a página de listagem). Rode os scrapers para obter uma coleta real e, depois, `build_corpus.py`.
+Veja `NOTA_COLETA.md` para o histórico de como os dados foram obtidos.

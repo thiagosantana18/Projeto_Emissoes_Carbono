@@ -1,73 +1,95 @@
-# Projeto ESG — Monitoramento e Previsão de Emissões de Carbono Corporativas
+# Monitoramento e Previsão de Emissões de Carbono Corporativas (ESG · ODS 12 e 13)
 
-Estrutura de pastas baseada no **TDSP (Team Data Science Process)**, adaptada para um projeto
-de ciência de dados com IA generativa aplicado ao pilar **Ambiental (E)** do ESG,
-alinhado aos ODS 12 e 13 da Agenda 2030.
+Projeto de ciência de dados com IA aplicada ao pilar **Ambiental (E)** do ESG, organizado com **CRISP-DM** (ciclo analítico)
+e **TDSP** (estrutura e documentação). Ajuda pequenas e médias empresas a enxergar, de forma contínua, a sua pegada de carbono.
 
-## Estrutura de pastas
+**Etapa atual (3):** dashboard multipágina · API REST (FastAPI) · scraping aprimorado (BeautifulSoup) · dados preparados para LLM.
+**Ainda não implementado:** previsão de emissões (Etapa de Modeling) e tarefas com LLM (Etapa 4).
 
+## Arquitetura
 ```
-projeto-esg-emissoes-carbono/
-│
-├── Docs/                        # Documentação do projeto (fases do TDSP)
-│   ├── Project/                 # Project Charter, Exit Report
-│   ├── Data_Report/             # Data Summary Report, Data Quality Report
-│   ├── Model_Report/            # Documentação técnica do(s) modelo(s)
-│   └── Presentations/           # Apresentações e materiais de comunicação
-│
-├── Code/                        # Código-fonte do pipeline analítico
-│   ├── data_acquisition/        # Scripts de coleta via API (Climatiq, EPA, SEEG)
-│   ├── data_exploration/        # Análise exploratória (EDA)
-│   ├── feature_engineering/     # Criação de variáveis para o modelo
-│   ├── modeling/
-│   │   ├── model_building/      # Treinamento dos modelos (ex.: Prophet, SARIMA)
-│   │   └── model_evaluation/    # Avaliação e métricas (MAPE, RMSE)
-│   ├── scoring/                 # Geração de previsões/scoring em novos dados
-│   └── genai_reporting/         # Integração com LLM para geração do relatório narrativo
-│
-├── Data/                        # Dados do projeto (NUNCA versionar dados sensíveis)
-│   ├── raw/                     # Dados brutos, como extraídos das fontes/APIs
-│   ├── interim/                 # Dados intermediários (limpeza parcial)
-│   └── processed/                # Dados finais, prontos para modelagem/dashboard
-│
-├── App/                         # Aplicação final (dashboard)
-│   ├── dashboard/                # Código do dashboard Streamlit
-│   └── assets/                   # Imagens, ícones, CSS/estilos do dashboard
-│
-├── Scripts/                     # Scripts utilitários (setup de ambiente, agendamento, etc.)
-│
-├── requirements.txt             # Dependências Python do projeto
-└── README.md                    # Este arquivo
+Fontes ───────────────► Code/ (pipeline) ─────────► Data/ ──────────► Code/esg_core ─┬─► App/api        (FastAPI)
+sites (BeautifulSoup)    data_acquisition/           raw/                (dados,       └─► App/dashboard  (Streamlit)
+gerador sintético        data_preparation/           processed/           validação,
+POST /emissoes, uploads                              (corpus_llm.jsonl)   corpus)
 ```
 
-## Metodologia
+## Como executar
+Requer Python 3.10+. A partir da **raiz do projeto**:
+```bash
+python -m venv venv
+venv\Scripts\activate            # Windows   (Linux/macOS: source venv/bin/activate)
+pip install -r requirements.txt
 
-- **CRISP-DM**: guia o ciclo analítico (Business Understanding → Data Understanding →
-  Data Preparation → Modeling → Evaluation → Deployment).
-- **TDSP**: guia a organização do repositório, papéis da equipe e os documentos de
-  governança do projeto (Project Charter, Data Summary Report, Model Report, Exit Report).
+streamlit run App/dashboard/app.py          # dashboard  → http://localhost:8501
+uvicorn App.api.main:app --reload           # API        → http://127.0.0.1:8000/docs   (outro terminal)
+```
+Os dados de exemplo já acompanham o projeto: o dashboard funciona logo após a instalação.
 
-## Status atual do projeto
+### Atualizar dados (opcional, precisa de internet)
+```bash
+python Scripts/atualizar_dados.py                 # scraping (ODS + notícias) → corpus para LLM
+python Scripts/atualizar_dados.py --sem-scraping  # só reconstrói o corpus
+python Scripts/atualizar_dados.py --regenerar-amostra
+```
+Os scrapers **verificam o robots.txt antes de coletar** e abortam se a fonte não permitir.
+> Se você já tem seus próprios `Data/raw/noticias_esg.csv` e `ods_conteudo.csv` de uma coleta real, **mantenha-os** e rode apenas `--sem-scraping`.
 
-- [x] Business Understanding — Project Charter (v2)
-- [x] Data Acquisition and Understanding — Data Summary Report (v2), incluindo
-      dados coletados via web scraping (BeautifulSoup)
-- [x] Aplicação demo (Streamlit) — Versão 2: interface em abas, cache, estado
-      de sessão, nuvem de palavras e upload/download de CSV
-- [ ] Data Preparation completa (limpeza, EDA, Data Quality Report)
-- [ ] Modeling (previsão de emissões, explicabilidade das fontes)
-- [ ] Evaluation
-- [ ] Deployment final (relatório automático via IA generativa)
+## O que há no dashboard (menu lateral)
+| Seção | Página | Conteúdo |
+|---|---|---|
+| Projeto | Visão geral | problema, objetivos, justificativa dos ODS, arquitetura, diagnóstico de caminhos |
+| Dados e análises | Dados e gráficos | filtros persistentes, gráficos interativos (Plotly), tabela e download |
+| | Notícias e nuvem de palavras | tabela de manchetes, busca, tags, nuvem de palavras e ranking |
+| | Estatísticas e qualidade | estatísticas descritivas, Pareto, checklist de qualidade, estatísticas de texto |
+| Serviços | Upload e download | upload de CSV com validação linha a linha, modelo de CSV, downloads |
+| | API (FastAPI) | cliente de demonstração: GET, POST e rotas de texto |
+| Próximos passos | Preparação para LLM | casos de uso × prontidão dos dados, artefatos, corpus |
 
-## Versão 2 — o que foi adicionado
+Cache: `st.cache_data` com chave = data de modificação dos arquivos. Estado de sessão: filtros, uploads e histórico persistem entre páginas.
 
-- **Web scraping (BeautifulSoup)**: dois scripts em `Code/data_acquisition/`,
-  cada um verificando o `robots.txt` do domínio-alvo antes de coletar,
-  salvando o resultado em `Data/raw/*.csv` e `*.txt`.
-- **Nuvem de palavras e estatísticas básicas**: geradas a partir dos dados
-  coletados, exibidas na aplicação.
-- **Cache e estado de sessão em Streamlit**: `st.cache_data` para os
-  carregamentos de dados; `st.session_state` para filtros, histórico de
-  uploads e o dataset combinado entre interações.
-- **Upload e download de CSV**: o usuário pode complementar o dataset da
-  aplicação enviando seus próprios dados, e baixar o resultado consolidado.
+## API (resumo — detalhes em `Docs/API/API_Documentation.md`)
+| Método | Rota | Função |
+|---|---|---|
+| GET | `/emissoes` | consulta com filtros e paginação |
+| POST | `/emissoes` | envia um registro (validado; calcula a emissão se omitida) |
+| GET | `/emissoes/resumo` · POST `/emissoes/lote` | agregações · envio em lote |
+| GET | `/noticias` · `/ods` · `/corpus` · `/corpus/contexto-relatorio` | textos coletados e dados para LLM |
+| GET | `/health` | status |
+
+## Estrutura de pastas (TDSP)
+```
+App/api/            FastAPI (main, schemas, routers/)
+App/dashboard/      Streamlit (app.py, ui_helpers.py, views/)
+Code/esg_core/      camada de dados compartilhada (paths, data_access, validation, corpus, text_utils, amostra)
+Code/data_acquisition/   scrapers + gerador de amostra       Code/data_preparation/  build_corpus.py
+Code/llm/           reservado para a Etapa 4 (sem código)    Code/modeling/          (Etapa de Modeling)
+Data/raw|processed|interim|external/        Docs/Project|Data_Report|API|Model_Report|Presentations/
+Scripts/            atualizar_dados.py                       tests/                  testes automatizados
+```
+
+## Testes
+```bash
+python -m unittest discover -s tests -v      # ou: pytest
+pip install -r requirements-dev.txt           # para incluir os testes da API (FastAPI + httpx)
+```
+
+## Documentação
+- `Docs/Project/Project_Charter.docx` (v3) · `Docs/Data_Report/Data_Summary_Report.docx` (v3, com dicionário de dados)
+- `Docs/Project/Decision_Log.md` — decisões (inclui por que **não** usamos Selenium) e lições aprendidas
+- `Docs/Project/LLM_Readiness.md` — como os dados serão usados com LLMs · `Docs/API/API_Documentation.md`
+- `Data/raw/NOTA_COLETA.md` — histórico de como os dados brutos foram obtidos
+
+## Status
+- [x] Business Understanding — Project Charter v3 (problema reavaliado)
+- [x] Data Acquisition — API/scraping/amostra; Data Summary Report v3
+- [x] Dashboard multipágina · API FastAPI · testes · preparação para LLM
+- [ ] Data Quality Report completo / EDA aprofundada
+- [ ] Modeling — previsão de emissões (Prophet/SARIMA) e explicabilidade
+- [ ] Etapa 4 — tarefas com LLM (sentimento, resumo, Q&A, relatórios)
+- [ ] Consulta real à Climatiq API (hoje os fatores são valores de referência rotulados por fonte)
+
+## Avisos
+- Dados de atividade **sintéticos** (demonstração). Fatores de emissão: valores de referência fixos.
+- API **sem autenticação**: uso local. Não versionamos dados enviados via API (ver `.gitignore`).
+- Conteúdo de terceiros coletado por scraping: só metadados/trechos curtos; respeite os termos de uso das fontes.
