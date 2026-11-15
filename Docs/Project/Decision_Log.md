@@ -51,7 +51,47 @@ via API, `interim/`, `external/` (licenças próprias), binários pesados, `.env
 `unittest` (stdlib) para rodar sem dependências extras; compatível com `pytest`. Cobrem validação, acesso a dados (incluindo regressão do
 `KeyError`), corpus, parsing dos scrapers com HTML de exemplo, e a API (pulada se FastAPI/httpx ausentes).
 
+## Etapa 4 — LLM local, API robusta e dashboard consumindo a API
+
+## ADR-009 — Modelo: DistilBERT multilíngue de sentimento
+**Decisão.** `lxyuan/distilbert-base-multilingual-cased-sentiments-student` (≈135 M parâmetros, Apache-2.0, português incluído, rótulos
+positive/neutral/negative), para **classificação de sentimento**. **Motivo.** Máquina modesta + protótipo; a tarefa casa com os dados que temos
+(manchetes) e com o gabarito. Resumo e geração exigem modelos maiores e dados que ainda não existem. Comparação e matriz de decisão em
+`LLM_Model_Selection.md`. **Ressalva.** O cartão reporta concordância com o professor (88,29 %), não acurácia contra humanos: a qualidade em manchetes
+ESG é **desconhecida** até rotularmos o gabarito. Honestidade de terminologia: é um modelo de linguagem *encoder* pequeno, não um LLM generativo.
+
+## ADR-010 — Execução local, offline por padrão, carga preguiçosa
+`transformers` + `torch` (CPU) em `Models/hf_cache` (fora do Git). A API **nunca baixa** o modelo durante uma requisição (`ESG_LLM_OFFLINE=1`);
+o download é um passo explícito (`Code/llm/baixar_modelo.py`). Carga na primeira chamada (ou `POST /modelo/carregar`, ou `ESG_LLM_PRELOAD=1`),
+protegida por lock. Dependências pesadas ficam em `requirements-llm.txt`: sem elas, API e dashboard funcionam e as rotas de LLM respondem 503 com instrução.
+
+## ADR-011 — Robustez em máquina modesta
+Uma thread de inferência, timeout (504), fila de no máx. 4 pendentes (429), espera de 30 s após falha de carga, limites de 2000 caracteres / 256 tokens / 32 textos.
+Limitação assumida: um timeout não aborta a thread; ela termina e libera a vaga depois.
+
+## ADR-012 — Envelope de erro único e Response Models
+Todo erro (validação, 404/405, falhas do modelo, exceção inesperada) sai como `{codigo, mensagem, detalhes, sugestao, request_id}` + `X-Request-ID`.
+Mensagens de validação do Pydantic são traduzidas e **não ecoam o valor enviado**; exceções inesperadas não vazam traceback. As respostas de sucesso
+são Response Models Pydantic e a saída do modelo é validada antes (rótulos, [0,1], soma ≈ 1). **Mudança de contrato:** o campo `detail` do FastAPI deixou de existir
+(agora `mensagem`/`detalhes`) em todas as rotas; o dashboard foi ajustado.
+
+## ADR-013 — O dashboard consome a API
+A página principal (*Dados e gráficos*) lê `GET /emissoes` e a página *Análise de texto* usa `POST /processar_texto` e `/lote`. Há alternância API/LOCAL e **fallback
+automático** para os arquivos locais (com aviso visível) quando a API está fora do ar. Cache de 20 s com botão de atualização. As demais páginas ainda leem os arquivos
+diretamente — migração gradual.
+
+## ADR-014 — Testabilidade sem o modelo
+O serviço recebe o "carregador" por injeção; os testes usam um pipeline falso (nada é baixado). Assim a lógica de erros, timeout, fila e validação é testada em qualquer máquina.
+O que **não** é coberto por teste automático: a inferência real com o modelo (use `Code/llm/verificar_modelo.py`).
+
+## ADR-015 — Remoção de arquivos legados
+`App/dashboard/README_app.md` e `Code/genai_reporting/README.md` descreviam uma estrutura que não existe mais. Já não constam do projeto entregue, mas extrair um zip
+por cima de uma pasta antiga não apaga arquivos: `Scripts/remover_legados.py` lista (e, com `--executar`, remove) esses resíduos. `Code/genai_reporting` foi unificada em `Code/llm` + `Code/esg_core/llm`.
+
 ## Lições aprendidas
 1. **Schema drift** entre scraper e app derrubou o dashboard → loaders defensivos + teste de regressão.
 2. **Duas versões do mesmo arquivo** com caminhos diferentes causaram "dados não encontrados" → uma só versão e raiz detectada automaticamente.
 3. **Testar só a lógica "feliz" não basta**: o teste do corpus revelou que preencher data de publicação com data de coleta enganaria citações futuras.
+4. **Extrair um zip por cima de um projeto não remove o que foi apagado** → resíduos contraditórios; criamos `remover_legados.py` e passamos a listar remoções no CHANGELOG.
+5. **Não afirmar o que não foi medido:** requisitos de hardware e latência do modelo estão marcados como estimativa até rodar `verificar_modelo.py`.
+6. **Dependência opcional pesada = isolar:** `requirements-llm.txt` + carga preguiçosa mantêm o restante do projeto leve e utilizável.

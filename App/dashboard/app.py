@@ -41,8 +41,9 @@ paginas = {
         st.Page("views/upload_download.py", title="Upload e download", icon="📤"),
         st.Page("views/api_explorer.py", title="API (FastAPI)", icon="🔌"),
     ],
-    "Próximos passos": [
-        st.Page("views/preparacao_llm.py", title="Preparação para LLM", icon="🤖"),
+    "IA e LLM": [
+        st.Page("views/analise_texto.py", title="Análise de texto (LLM local)", icon="🤖"),
+        st.Page("views/preparacao_llm.py", title="Preparação dos dados", icon="🧪"),
     ],
 }
 

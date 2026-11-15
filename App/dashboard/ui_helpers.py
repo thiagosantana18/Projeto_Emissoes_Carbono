@@ -10,6 +10,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+import api_client
+
 from esg_core import data_access as da
 from esg_core import paths
 from esg_core.text_utils import STOPWORDS_PT
@@ -25,13 +27,14 @@ COR = "#1F6F50"
 # Chaves de widgets cujo valor deve sobreviver à troca de página (ver manter_estado).
 CHAVES_PERSISTENTES = [
     "f_unidades", "f_atividades", "f_origens", "f_periodo",
-    "noticias_busca", "noticias_tag", "nuvem_fonte", "nuvem_topn", "api_url",
+    "noticias_busca", "noticias_tag", "nuvem_fonte", "nuvem_topn", "api_url", "fonte_dados", "texto_llm",
 ]
 
 
 # ------------------------------------------------------------------ estado
 def inicializar_estado() -> None:
-    padroes = {"df_uploads": None, "historico_uploads": [], "uploader_n": 0, "api_url": "http://127.0.0.1:8000"}
+    padroes = {"df_uploads": None, "historico_uploads": [], "uploader_n": 0, "api_url": "http://127.0.0.1:8000",
+               "api_nonce": 0, "sentimentos_resultados": None}
     for k, v in padroes.items():
         st.session_state.setdefault(k, v)
 
@@ -116,6 +119,41 @@ def emissoes_consolidadas() -> pd.DataFrame:
     if up is not None and not up.empty:
         return pd.concat([base, up], ignore_index=True)
     return base
+
+
+@st.cache_data(ttl=20, show_spinner=False)
+def _emissoes_api(base_url: str, nonce: int) -> pd.DataFrame:
+    """Dados vindos da API. Cache curto (20 s); `nonce` permite forçar atualização. Exceções não são cacheadas."""
+    return api_client.obter_emissoes(base_url)
+
+
+def emissoes_para_graficos():
+    """
+    Fonte principal dos gráficos. Devolve (DataFrame, fonte, aviso):
+      fonte = "API" (consumindo GET /emissoes) ou "LOCAL" (arquivos); aviso = motivo do fallback, se houve.
+    Uploads feitos nesta sessão são sempre somados.
+    """
+    aviso = None
+    fonte = "LOCAL"
+    df = None
+    if st.session_state.get("fonte_dados", "API") == "API":
+        try:
+            df = _emissoes_api(st.session_state["api_url"], st.session_state["api_nonce"])
+            fonte = "API"
+        except api_client.ApiIndisponivel as exc:
+            aviso = f"{exc} Exibindo os arquivos locais."
+        except api_client.ApiErro as exc:
+            aviso = f"A API devolveu um erro ({exc.codigo}: {exc.mensagem}). Exibindo os arquivos locais."
+        if df is not None and df.empty:
+            df = None
+            aviso = "A API não retornou registros. Exibindo os arquivos locais."
+            fonte = "LOCAL"
+    if df is None:
+        df = emissoes_base_api()
+    up = st.session_state.get("df_uploads")
+    if up is not None and not up.empty:
+        df = pd.concat([df, up], ignore_index=True)
+    return df, fonte, aviso
 
 
 @st.cache_data(show_spinner=False)

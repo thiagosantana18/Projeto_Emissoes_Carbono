@@ -30,7 +30,7 @@ if st.button("🩺 Testar conexão (GET /health)"):
         st.success(f"HTTP {r.status_code}") if r.ok else st.error(f"HTTP {r.status_code}")
         st.json(r.json())
 
-aba_get, aba_post, aba_txt = st.tabs(["GET /emissoes", "POST /emissoes", "GET /noticias · /ods · /corpus"])
+aba_get, aba_post, aba_txt, aba_llm = st.tabs(["GET /emissoes", "POST /emissoes", "GET /noticias · /ods · /corpus", "POST /processar_texto"])
 
 with aba_get:
     c1, c2, c3 = st.columns(3)
@@ -80,7 +80,7 @@ with aba_post:
                 st.json(r.json())
             elif r.status_code == 422:
                 st.error("Dados rejeitados pela validação (HTTP 422):")
-                st.json(r.json().get("detail"))
+                st.json(r.json().get("detalhes") or r.json())
             else:
                 st.error(f"HTTP {r.status_code}: {r.text}")
 
@@ -102,4 +102,14 @@ with aba_txt:
                 else:
                     st.json(j)
             else:
-                st.warning(r.json().get("detail", r.text))
+                st.warning(r.json().get("mensagem", r.text))
+
+with aba_llm:
+    st.markdown("Veja a resposta **bruta** da API, inclusive o envelope de erro (tente texto vazio, ou rode sem o modelo baixado).")
+    texto_teste = st.text_area("texto", "Resultado ótimo para a empresa", key="explorer_texto")
+    if st.button("Executar POST /processar_texto"):
+        r = chamar("POST", "/processar_texto", json={"texto": texto_teste})
+        if r is not None:
+            st.caption(f"HTTP {r.status_code} · X-Request-ID: {r.headers.get('X-Request-ID', '-')}"
+                       + (f" · Retry-After: {r.headers['Retry-After']}" if "Retry-After" in r.headers else ""))
+            st.json(r.json())

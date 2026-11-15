@@ -5,9 +5,9 @@ from esg_core import data_access as da
 from esg_core import paths
 from ui_helpers import corpus, fmt_num
 
-st.title("🤖 Preparação para LLM")
-st.info("Esta página mostra **o quanto os dados já estão prontos** para tarefas com LLM. "
-        "**Nenhum modelo é executado aqui** — a integração acontece na próxima etapa.")
+st.title("🧪 Preparação dos dados para LLM")
+st.info("Mostra **o quanto os dados estão prontos** para cada tarefa com LLM. A **classificação de sentimento já roda** "
+        "com um modelo local (página *Análise de texto*); resumo, Q&A e geração de relatórios seguem como próximas etapas.")
 
 docs = corpus()
 dfc = pd.DataFrame(docs)
@@ -17,8 +17,8 @@ n_ods = int((dfc["tipo"] == "ods_trecho").sum()) if docs else 0
 st.subheader("Casos de uso × dados disponíveis")
 casos = pd.DataFrame([
     {"Caso de uso": "Classificação de sentimento", "Dados": f"{n_not} manchetes (título + linha fina quando houver)",
-     "Prontidão": "🟡 Parcial", "Lacuna / decisão": "Só títulos curtos; falta gabarito humano para medir acurácia",
-     "Artefato preparado": "avaliacao/sentimento_gold_template.csv"},
+     "Prontidão": "🟢 Implementado (modelo local)", "Lacuna / decisão": "Só títulos curtos; falta gabarito humano para medir acurácia (rotular o template e rodar avaliar_sentimento.py)",
+     "Artefato preparado": "POST /processar_texto · avaliacao/sentimento_gold_template.csv"},
     {"Caso de uso": "Resumo automático", "Dados": f"{n_ods} trechos de ODS (≤ 600 caracteres)",
      "Prontidão": "🔴 Lacuna", "Lacuna / decisão": "Não há textos longos. Decidir: coletar corpo de artigos (respeitando robots.txt e direitos autorais) ou resumir conjuntos de documentos",
      "Artefato preparado": "corpus_llm.jsonl (campo texto)"},
@@ -56,8 +56,8 @@ if ctx:
     with st.expander("Contexto numérico para geração de relatórios (prévia)"):
         st.json({k: ctx[k] for k in ("periodo", "n_registros", "total_kgco2e", "maiores_fontes", "variacao_ultimo_mes_pct")})
 
-st.subheader("Fluxo planejado para a Etapa 4")
-st.code("""Data/processed/corpus_llm.jsonl ──► [sentimento | resumo | Q&A com recuperação] ──► resultados + métricas
+st.subheader("Fluxo (sentimento já implementado)")
+st.code("""Data/processed/corpus_llm.jsonl ──► [sentimento ✅ | resumo | Q&A com recuperação] ──► resultados + métricas
 Data/processed/contexto_relatorio.json ─► [geração de relatório] ──► texto + checagem de fidelidade numérica
 Data/processed/avaliacao/*.csv ─────────► avaliação (acurácia, fidelidade, taxa de alucinação)""", language="text")
 st.caption("Detalhes em Docs/Project/LLM_Readiness.md.")

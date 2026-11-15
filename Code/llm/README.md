@@ -1,16 +1,13 @@
-# Code/llm — reservado para a Etapa 4 (NÃO implementado)
+# Code/llm — scripts do LLM local
 
-Nesta etapa a pasta existe só para **fixar o contrato** com a camada de dados. Nenhum código de LLM foi escrito.
+| Script | Função |
+|---|---|
+| `baixar_modelo.py` | baixa o modelo para `Models/hf_cache` (uma vez, com internet, ~0,5 GB) |
+| `verificar_modelo.py` | diagnóstico: dependências, cache, carga, memória, latência e 3 frases de teste (código de saída 1 se falhar) |
+| `avaliar_sentimento.py prever` | classifica as notícias do corpus → `Data/processed/sentimento_noticias.csv` |
+| `avaliar_sentimento.py avaliar` | compara com o gabarito humano (`avaliacao/sentimento_gold_template.csv`): acurácia, F1, matriz de confusão |
 
-Entradas já prontas (geradas por `Code/data_preparation/build_corpus.py`):
+A lógica (serviço, configuração, erros, métricas) está em `Code/esg_core/llm/` — compartilhada com a API.
+Escolha do modelo: `Docs/Project/LLM_Model_Selection.md`. Pré-requisito: `pip install -r requirements-llm.txt`.
 
-| Tarefa planejada | Entrada | Avaliação |
-|---|---|---|
-| Classificação de sentimento | `Data/processed/corpus_llm.jsonl` (tipo `noticia`) | `Data/processed/avaliacao/sentimento_gold_template.csv` |
-| Resumo automático | `corpus_llm.jsonl` (campo `texto`) | rubrica humana (ver `Docs/Project/LLM_Readiness.md`) |
-| Perguntas e respostas | `corpus_llm.jsonl` (+ `doc_id`/`url` para citar a fonte) | `avaliacao/qa_gold_template.csv` |
-| Geração de relatórios | `Data/processed/contexto_relatorio.json` | checagem de fidelidade numérica |
-
-Módulos previstos: `client.py` (cliente do provedor, chave via `.env`), `sentimento.py`, `resumo.py`, `qa.py`,
-`relatorio.py`, `prompts/`. Leitura dos dados: `esg_core.data_access.carregar_corpus()` /
-`carregar_contexto_relatorio()` ou as rotas `GET /corpus` e `GET /corpus/contexto-relatorio` da API.
+Planejado (não implementado): resumo, perguntas e respostas e geração de relatórios (ver `Docs/Project/LLM_Readiness.md`).

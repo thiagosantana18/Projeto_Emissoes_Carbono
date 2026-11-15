@@ -3,7 +3,7 @@ import streamlit as st
 from ui_helpers import corpus, emissoes_consolidadas, fmt_num, noticias, painel_diagnostico
 
 st.title("🌱 Monitoramento e Previsão de Emissões de Carbono Corporativas")
-st.caption("Pilar Ambiental (E) do ESG · ODS 12 e 13 · CRISP-DM / TDSP · Etapa 3 — multipágina, API e preparação para LLM")
+st.caption("Pilar Ambiental (E) do ESG · ODS 12 e 13 · CRISP-DM / TDSP · Etapa 4 — LLM local, API robusta e dashboard consumindo a API")
 
 df = emissoes_consolidadas()
 c1, c2, c3, c4 = st.columns(4)
@@ -34,7 +34,7 @@ with col_o:
 1. Coletar dados de atividade/fatores por **API** e contexto por **web scraping** (BeautifulSoup);
 2. Disponibilizar os dados por uma **API REST (FastAPI)** — consulta (GET) e envio (POST);
 3. Explorar tudo em um **dashboard multipágina** com cache e estado de sessão;
-4. **Preparar** os dados para tarefas com LLM (sentimento, resumo, Q&A, relatórios);
+4. Analisar textos com um **LLM local** (Hugging Face): sentimento já implementado; resumo, Q&A e relatórios em preparação;
 5. *(próximas etapas)* prever emissões e gerar relatórios com IA generativa.
         """
     )
@@ -62,7 +62,7 @@ Sites (BeautifulSoup) ──► data_acquisition/scrape_*.py ──► raw/*.csv
 Gerador sintético     ──► data_acquisition/generate_*  ──► processed/amostra  ├─► esg_core ─┬─► API FastAPI  (App/api)
 Uploads / POST /emissoes ─────────────────────────────────► raw/emissoes_env. ┘             └─► Dashboard    (App/dashboard)
                           data_preparation/build_corpus ─► processed/corpus_llm.jsonl, contexto_relatorio.json
-                                                           └─► (Etapa 4) tarefas com LLM""",
+                                                           └─► API ─► LLM local (sentimento) · resumo/Q&A/relatórios: a fazer""",
     language="text",
 )
 

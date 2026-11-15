@@ -142,3 +142,4 @@ class HealthOut(BaseModel):
     status: str
     versao: str
     arquivos: dict[str, bool]
+    llm: Optional[dict[str, bool]] = None

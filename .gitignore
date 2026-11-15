@@ -20,16 +20,13 @@ htmlcov/
 # ---------- Dados ----------
 # Versionados de propósito (pequenos e necessários para reproduzir/rodar o projeto):
 #   Data/raw/noticias_esg.*, Data/raw/ods_conteudo.*, Data/processed/*
-
 # NÃO versionados:
 # dados enviados por usuários via API (podem conter informação da empresa)
 Data/raw/emissoes_enviadas_api.csv
-
 # artefatos intermediários regeneráveis
 Data/interim/*
 !Data/interim/README.md
 !Data/interim/.gitkeep
-
 # dados de terceiros baixados manualmente (licenças próprias) e arquivos pesados
 Data/external/*
 !Data/external/README.md
@@ -39,6 +36,10 @@ Data/external/*
 *.sqlite
 *.db
 Data/**/*.zip
+
+# ---------- Modelos de IA baixados (≈0,5 GB; reproduzíveis com Code/llm/baixar_modelo.py) ----------
+Models/*
+!Models/README.md
 
 # ---------- Logs, notebooks, editores, SO ----------
 *.log

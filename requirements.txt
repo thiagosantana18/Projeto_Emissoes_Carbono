@@ -19,5 +19,7 @@ beautifulsoup4>=4.12.0
 wordcloud>=1.9.3
 matplotlib>=3.8.0
 
+# LLM local (torch + transformers) fica em requirements-llm.txt — instale só se for usar /processar_texto.
+
 # Selenium NÃO é usado: nenhuma fonte atual exige renderização JavaScript
 # (ver Docs/Project/Decision_Log.md, ADR-003).

@@ -1,12 +1,26 @@
 import plotly.express as px
 import streamlit as st
 
-from ui_helpers import emissoes_consolidadas, fmt_num, multiselect_persistente, periodo_persistente
+from ui_helpers import (emissoes_para_graficos, fmt_num, multiselect_persistente, periodo_persistente,
+                        valor_padrao)
 
 st.title("📊 Dados e gráficos interativos")
 st.caption("Filtre por unidade, atividade, origem e período. Os filtros são mantidos ao trocar de página.")
 
-df = emissoes_consolidadas()
+valor_padrao("fonte_dados", "API")
+topo1, topo2 = st.columns([3, 1])
+topo1.radio("Fonte dos dados", ["API", "LOCAL"], horizontal=True, key="fonte_dados",
+            help="API: esta página consome GET /emissoes da API FastAPI. LOCAL: lê os arquivos diretamente.")
+if topo2.button("🔄 Atualizar da API"):
+    st.session_state["api_nonce"] += 1
+
+df, fonte, aviso = emissoes_para_graficos()
+if fonte == "API":
+    st.success(f"📡 Dados obtidos pela API em {st.session_state['api_url']} (GET /emissoes) — {len(df)} registros.")
+elif aviso:
+    st.warning(f"⚠️ {aviso}\n\nPara usar a API: `uvicorn App.api.main:app --reload`.")
+else:
+    st.info("💾 Dados lidos dos arquivos locais.")
 if df.empty:
     st.warning("Sem dados de emissões. Gere a amostra: `python Code/data_acquisition/generate_sample_emissions.py`.")
     st.stop()

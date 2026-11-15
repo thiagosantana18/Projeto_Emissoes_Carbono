@@ -1,0 +1,9 @@
+# LLM local (Hugging Face) — necessário para POST /processar_texto.
+# Instale com:  pip install -r requirements-llm.txt
+#
+# Windows: `pip install torch` já instala a versão CPU (~200 MB).
+# Linux:   o pacote padrão do PyPI traz bibliotecas CUDA (vários GB). Para CPU use antes:
+#          pip install torch --index-url https://download.pytorch.org/whl/cpu
+torch>=2.2.0
+transformers>=4.40.0
+psutil>=5.9.0        # opcional: mede memória em Code/llm/verificar_modelo.py
