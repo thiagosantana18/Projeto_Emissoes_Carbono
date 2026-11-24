@@ -1,0 +1,57 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ---------- Segredos e configuração local ----------
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# ---------- Dados ----------
+# Versionados de propósito (pequenos e necessários para reproduzir/rodar o projeto):
+#   Data/raw/noticias_esg.*, Data/raw/ods_conteudo.*, Data/processed/*
+# NÃO versionados:
+# dados enviados por usuários via API (podem conter informação da empresa)
+Data/raw/emissoes_enviadas_api.csv
+# saídas e auditoria da IA (podem conter trechos de resultados; regeneráveis)
+Data/processed/ia/
+# artefatos intermediários regeneráveis (inclui o cache de respostas da IA)
+Data/interim/*
+!Data/interim/README.md
+!Data/interim/.gitkeep
+# dados de terceiros baixados manualmente (licenças próprias) e arquivos pesados
+Data/external/*
+!Data/external/README.md
+!Data/external/.gitkeep
+*.parquet
+*.feather
+*.sqlite
+*.db
+Data/**/*.zip
+
+# ---------- Modelos de IA baixados (≈0,5 GB; reproduzíveis com Code/llm/baixar_modelo.py) ----------
+Models/*
+!Models/README.md
+
+# ---------- Logs, notebooks, editores, SO ----------
+*.log
+logs/
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---------- Contingência (Selenium não é usado hoje) ----------
+chromedriver*
+geckodriver*
